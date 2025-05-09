@@ -1,12 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Document;
+import com.example.demo.model.MessageLog;
 import com.example.demo.model.Organization;
 import com.example.demo.repository.DocumentRepository;
-import com.example.demo.service.AIService;
-import com.example.demo.service.MessageLogService;
-import com.example.demo.service.RAGService;
-import com.example.demo.service.TenantService;
+import com.example.demo.service.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Scanner;
 
 @RestController
@@ -32,10 +31,13 @@ public class WhatsAppWebhookController {
 
   @Autowired private DocumentRepository documentRepository;
   @Autowired private MessageLogService messageLogService;
+  @Autowired private TwilioService twilioService;
+  @Autowired private DocumentService documentService;
+
 
   @PostMapping("/webhook")
   public ResponseEntity<String> handleMessage(
-      @RequestParam String message, @RequestParam String whatsappNumber) {
+      @RequestParam("Body") String message, @RequestParam("From") String whatsappNumber) {
     try {
 
       // 1. Trovare l'organizzazione tramite il numero WhatsApp
@@ -45,20 +47,22 @@ public class WhatsAppWebhookController {
       // Registrare il messaggio in arrivo dall'utente
       messageLogService.logMessage(true, message, organization);
 
-
       // 2. Creazione del contesto tramite RAG (Documenti correlati)
       String context = ragService.buildContext(message, organization);
       System.out.println("context:" + context);
 
       // 3. Ottieni una risposta da OpenAI utilizzando il contesto
       String aiResponse = aiService.generateResponse(message, context);
+      if (aiResponse == null || aiResponse.trim().isEmpty() || aiResponse.equalsIgnoreCase("I don't know.")) {
+        aiResponse = "Hello! I'm Yovendo's AI assistant. Could you please rephrase your question so I can help you better? 🙏";
+      }
 
       // Registra la risposta del modello all'utente
       messageLogService.logMessage(false, aiResponse, organization);
 
-
       // 4. Invia risposte a WhatsApp con Twilio o qualsiasi altro servizio
-      return ResponseEntity.ok("Message sent: " + aiResponse);
+      twilioService.sendMessage(whatsappNumber, aiResponse);
+      return ResponseEntity.ok("");
     } catch (IllegalArgumentException e) {
       // Se l'organizzazione non viene trovata
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
@@ -110,5 +114,30 @@ public class WhatsAppWebhookController {
       e.printStackTrace();
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Upload failed.");
     }
+  }
+
+
+  // ✅ Ricevi messaggi in base al numero WhatsApp
+  @GetMapping("/messages/{whatsappNumber}")
+  public List<MessageLog> getMessages(@PathVariable String whatsappNumber) {
+    return messageLogService.getMessagesByWhatsappNumber(whatsappNumber);
+  }
+
+  // ✅ Ricevi documenti in base al numero WhatsApp
+  @GetMapping("/documents/{whatsappNumber}")
+  public List<Document> getDocuments(@PathVariable String whatsappNumber) {
+    return documentService.getDocumentsByWhatsappNumber(whatsappNumber);
+  }
+
+  // ✅ Elimina documento per ID
+  @DeleteMapping("/documents/{docId}")
+  public void deleteDocument(@PathVariable Long docId) {
+    documentService.deleteDocument(docId);
+  }
+
+  // ✅Ottieni un elenco di tutte le organizzazioni
+  @GetMapping("/organizations")
+  public List<Organization> getAllOrganizations() {
+    return tenantService.getAllOrganizations();
   }
 }

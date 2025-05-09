@@ -12,11 +12,17 @@ public class TenantService {
   @Autowired private OrganizationRepository organizationRepository;
 
   public Organization getOrganizationByWhatsappNumber(String whatsappNumber) {
-    System.out.println("Searching for whatsapp number: " + whatsappNumber);  // Log
+    String cleanedNumber = whatsappNumber.startsWith("whatsapp:")
+            ? whatsappNumber.replace("whatsapp:", "")
+            : whatsappNumber;
+
+    System.out.println("Searching for whatsapp number: " + cleanedNumber);
+
     return organizationRepository
-            .findByWhatsappNumberNative(whatsappNumber)
-            .orElseThrow(() -> new IllegalArgumentException("No organization found for the WhatsApp number: " + whatsappNumber));
+            .findByWhatsappNumberNative(cleanedNumber)
+            .orElseThrow(() -> new IllegalArgumentException("No organization found for the WhatsApp number: " + cleanedNumber));
   }
+
 
   public List<Organization> getAllOrganizations() {
     return organizationRepository.findAll();
