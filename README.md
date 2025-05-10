@@ -12,4 +12,4 @@ Interrogazione dell’AI su qualsiasi dato presente nei PDF
 
 Esperienza utente migliorata grazie alla risposta immediata dell’intelligenza artificiale
 
-parte Backend: https://github.com/mnparsian/WhatsappAIBot
+parte Frontend: https://github.com/marty957/yovendo
