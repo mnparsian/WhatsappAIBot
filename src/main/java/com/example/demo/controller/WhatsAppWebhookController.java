@@ -21,6 +21,7 @@ import java.util.Scanner;
 
 @RestController
 @RequestMapping("/api/whatsapp")
+
 public class WhatsAppWebhookController {
 
   @Autowired private TenantService tenantService;
@@ -74,6 +75,7 @@ public class WhatsAppWebhookController {
   }
 
   @PostMapping("/upload")
+  @CrossOrigin (origins = "http://localhost:5173")
   public ResponseEntity<String> uploadDocument(
       @RequestParam("file") MultipartFile file,
       @RequestParam("whatsappNumber") String whatsappNumber) {
