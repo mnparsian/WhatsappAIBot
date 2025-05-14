@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TenantService {
@@ -26,6 +27,12 @@ public class TenantService {
 
   public List<Organization> getAllOrganizations() {
     return organizationRepository.findAll();
+  }
+
+  public Organization addOrganization(Organization organization) {
+    String embeddingIndexId = "index_" + UUID.randomUUID().toString();
+    organization.setEmbeddingIndexId(embeddingIndexId);
+    return organizationRepository.save(organization);
   }
 
 }

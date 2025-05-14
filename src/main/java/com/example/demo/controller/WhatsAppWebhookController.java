@@ -140,4 +140,10 @@ public class WhatsAppWebhookController {
   public List<Organization> getAllOrganizations() {
     return tenantService.getAllOrganizations();
   }
+
+  @PostMapping("/organizations")
+  public ResponseEntity<Organization> createOrganization(@RequestBody Organization organization) {
+    Organization saved = tenantService.addOrganization(organization);
+    return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+  }
 }
