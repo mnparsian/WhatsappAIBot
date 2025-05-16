@@ -90,3 +90,9 @@ In modalità gratuita, Twilio ha un limite di 9 messaggi al giorno per numero.
 Questo progetto è pensato come MVP ed è facilmente estendibile con un'interfaccia grafica e gestione utenti avanzata.
 
 Per domande o supporto, contattami su GitHub! 😊
+
+---
+
+## 📌 La Parte FrontEnd
+
+https://github.com/marty957/yovendo
