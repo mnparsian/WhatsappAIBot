@@ -39,10 +39,14 @@ Assicurati di avere installati questi strumenti, nell’ordine:
 
 2.Configura il file application.properties con le tue chiavi:
   openai.api.key=sk-xxxxx
+  
 qdrant.url=http://localhost:6333
+
 twilio.account.sid=ACxxxxx
+
 twilio.auth.token=xxxxxxx
-twilio.whatsapp.from=whatsapp:+14155238886
+
+twilio.whatsapp.from=whatsapp:+1xxxxxxxxxx
 
 3.Esegui Qdrant in locale (con Docker):
   docker run -p 6333:6333 -p 6334:6334 qdrant/qdrant
