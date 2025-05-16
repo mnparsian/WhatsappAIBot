@@ -58,8 +58,9 @@ twilio.whatsapp.from=whatsapp:+1xxxxxxxxxx
   ngrok http 8080
 Copia l’URL fornito (es. https://abc123.ngrok.io) e inseriscilo come webhook nella sandbox Twilio.
 
+---
 
-📦 Funzionalità
+## 📦 Funzionalità
 Aggiunta di organizzazioni con identificativo WhatsApp unico
 
 Upload documenti (PDF o testo)
@@ -74,12 +75,16 @@ RAG: ricerca nei documenti e risposta automatica contestuale
 
 Storico dei messaggi salvati in message_log
 
-👥 Ruoli nel Sistema
+---
+
+## 👥 Ruoli nel Sistema
 Admin: può caricare documenti e aggiungere organizzazioni
 
 Utente: invia messaggi tramite WhatsApp e riceve risposte AI in base ai documenti caricati
 
-📌 Note Finali
+----
+
+## 📌 Note Finali
 In modalità gratuita, Twilio ha un limite di 9 messaggi al giorno per numero.
 
 Questo progetto è pensato come MVP ed è facilmente estendibile con un'interfaccia grafica e gestione utenti avanzata.
