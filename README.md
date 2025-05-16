@@ -13,3 +13,9 @@ Interrogazione dell’AI su qualsiasi dato presente nei PDF
 Esperienza utente migliorata grazie alla risposta immediata dell’intelligenza artificiale
 
 parte Frontend: https://github.com/marty957/yovendo
+
+🛠️ Requisiti
+Puoi eseguire il progetto si deve avere Docker Desktop installato
+
+
+
